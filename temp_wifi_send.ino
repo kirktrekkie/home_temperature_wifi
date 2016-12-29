@@ -28,13 +28,14 @@ void setup() {
   mySerial.begin(9600);
   delay(1000);
 
+  print_ip_address();
+
   //Setup IP connection to receiving computer
+  Serial.println("Setup IP connection");
   mySerial.print("AT+CIPSTART=\"UDP\",\"192.168.0.255\",8000");
   mySerial.write(13);    // CR
   mySerial.write(10);    // LF
-  mySerial.flush();
-  delay(3000);
-  print_ip_address();
+  read_serial();
   delay(5000);
 }
 
@@ -50,11 +51,11 @@ void loop() {
     mySerial.write(10);    // LF
     delay(500);
     mySerial.print((float)DHT11.temperature, 2);
+    Serial.println((float)DHT11.temperature, 2);
     mySerial.write(13);    // CR
     mySerial.write(10);    // LF
-    delay(5000);
-  }else{
     digitalWrite(ledPin, LOW);
+    delay(5000);
   }
 }
 
@@ -78,11 +79,11 @@ void check_sensor(){
 }
 
 void print_ip_address(){
-  mySerial.flush();
-  mySerial.print("AT+CIPSR");
+  Serial.println("Print IP address");
+  mySerial.print("AT+CIFSR");
   mySerial.write(13);    // CR
   mySerial.write(10);    // LF
-  delay(1000);
+  delay(2000);
   read_serial();
 }
 
